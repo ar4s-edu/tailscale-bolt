@@ -14,31 +14,32 @@ on:
   pull_request:
 
 jobs:
+
   build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
-  
-  pre-build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
-      with:
-        node-version: '18'
-    - run: npm ci
-    - run: npm run lint
-    - run: npm run build
-   
- test-latest:
+   name: Build
+    
   strategy:
     matrix:
-      os: [ubuntu-latest, macos-latest, windows-latest]
-  runs-on: ${{ matrix.os }}
-  steps:
-  - uses: actions/checkout@v2
-  - name: Setup just
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+   runs-on: ${{ matrix.os }}
+  
+     steps:
+       # runs-on: ubuntu-latest
+      - name: Checkout
+      - uses: actions/checkout@v2
+
+      - name: Setup Node
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '18'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+
+      - name: Setup just
+      - uses: actions/checkout@v2
+
     uses: ./
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
