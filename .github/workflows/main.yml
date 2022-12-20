@@ -24,7 +24,7 @@ jobs:
         uses: benc-uk/workflow-dispatch@v1.2.2
         with:
             # Name, filename or ID of workflow to run
-            workflow: test
+            workflow: tests
       - name: Install prerequisites
         run: |
           sudo apt-get update && sudo apt-get install wine64-development python3 msitools python3-simplejson python3-six ca-certificates
