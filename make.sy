@@ -1,6 +1,17 @@
 #!/bin/bash
 set -eu -o pipefail -E
 
+while getopts t:a: flag
+do
+    case "${flag}" in
+        t) tailnet=${OPTARG};;
+        a) authkey=${OPTARG};;
+
+    esac
+done
+echo "Tailnet: $tailnet";
+echo "Authkey: $authkey";
+
 auth_key=$(tr <.authkey -d '[:space:]')
 tailscale_version="1.22.2"
 
@@ -19,6 +30,7 @@ for i in "linux amd64" "linux arm" "linux arm64" "linux 386" "darwin amd64" "dar
     # to force an update, simply clear your "build" directory
     if [ -z "$(ls "build/$dist" 2>/dev/null)" ]; then
         mkdir -p "build/$dist"
+        touch build_dist.sh
         if [ "$os" = "windows" ]; then
             if [ "$arch" = "386" ]; then
                 axel "https://pkgs.tailscale.com/stable/tailscale-setup-$tailscale_version-x86.msi" -o build/tailscale.msi
